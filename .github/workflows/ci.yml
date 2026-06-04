@@ -1,0 +1,24 @@
+name: ci to docker hub
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: login to docker
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.dockerhub_username }}
+          password: ${{ secrets.dockerhub_password }}
+      
+      - name: build the docker images
+        run: docker build -t satish9336/etp-ci:v1 .
+      
+      - name: push the docker images
+        run: docker push satish9336/etp-ci:v1
